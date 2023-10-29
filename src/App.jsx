@@ -16,7 +16,7 @@ function App() {
 	const [input, setInput] = useState("");
 	const [messages, setMessages] = useState([
 		{
-			text: "Hi, I am Trundle. Ask me anything!",
+			text: "Hi, I am ZookGPT. Ask me anything!",
 			isBot: true,
 		},
 	]);
@@ -186,7 +186,7 @@ function App() {
 					))}
 					<div ref={msgEnd} />
 				</div>
-				<h3>{isTyping ? "Trundle is typing..." : null}</h3>
+				<h3>{isTyping ? "ZookGPT is typing..." : null}</h3>
 				<div className="chatFooter">
 					<div className="inp">
 						<input
