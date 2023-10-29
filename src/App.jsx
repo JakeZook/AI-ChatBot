@@ -23,6 +23,7 @@ function App() {
 			isBot: true,
 		},
 	]);
+	const [isTyping, setIsTyping] = useState(false);
 
 	useEffect(() => {
 		msgEnd.current.scrollIntoView();
@@ -32,6 +33,8 @@ function App() {
 		const text = input;
 		setInput("");
 
+		setIsTyping(true);
+
 		setMessages([...messages, { text, isBot: false }]);
 
 		const res = await sendMsgToTrundle(text);
@@ -40,6 +43,8 @@ function App() {
 			{ text, isBot: false },
 			{ text: res, isBot: true },
 		]);
+
+		setIsTyping(false);
 	};
 
 	const handleEnter = async (e) => {
@@ -48,6 +53,7 @@ function App() {
 
 	const handleQuery = async (e) => {
 		const text = e.target.value;
+		setIsTyping(true);
 		setMessages([...messages, { text, isBot: false }]);
 
 		const res = await sendMsgToTrundle(text);
@@ -56,6 +62,8 @@ function App() {
 			{ text, isBot: false },
 			{ text: res, isBot: true },
 		]);
+
+		setIsTyping(false);
 	};
 
 	return (
@@ -84,14 +92,6 @@ function App() {
 						>
 							<img src={msgIcon} alt="Query" />
 							What is AI?
-						</button>
-						<button
-							className="query"
-							onClick={handleQuery}
-							value={"How do you use an API?"}
-						>
-							<img src={msgIcon} alt="Query" />
-							How do you use an API?
 						</button>
 						<button
 							className="query"
@@ -148,12 +148,12 @@ function App() {
 					))}
 					<div ref={msgEnd} />
 				</div>
+				<h3>{isTyping ? "Trundle is typing..." : null}</h3>
 				<div className="chatFooter">
 					<div className="inp">
 						<input
 							type="text"
 							placeholder="Send a message"
-							onClick={handleQuery}
 							value={input}
 							onKeyDown={handleEnter}
 							onChange={(e) => {
