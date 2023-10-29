@@ -69,7 +69,7 @@ function App() {
 				<div className="upperSide">
 					<div className="upperSideTop">
 						<img src={logo} alt="logo" className="logo" />
-						<span className="brand">TrundleGPT</span>
+						<span className="brand">ZookGPT</span>
 					</div>
 					<button
 						className="midBtn"
@@ -202,7 +202,7 @@ function App() {
 							<img src={sendBtn} alt="Send" />
 						</button>
 					</div>
-					<p>TrundleGPT may produce incorrect information</p>
+					<p>ZookGPT may produce incorrect information</p>
 				</div>
 			</div>
 		</div>
