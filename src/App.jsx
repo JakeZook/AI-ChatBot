@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import "./App.css";
 
 import logo from "./assets/chatgpt.svg";
@@ -7,10 +9,18 @@ import home from "./assets/home.svg";
 import saved from "./assets/bookmark.svg";
 import rocket from "./assets/rocket.svg";
 import sendBtn from "./assets/send.svg";
-
 import userIcon from "./assets/user-icon.png";
 
+import { sendMsgToTrundle } from "./openAi";
+
 function App() {
+	const [input, setInput] = useState("");
+
+	const handleSend = async () => {
+		const res = await sendMsgToTrundle(input);
+		console.log(res);
+	};
+
 	return (
 		<div className="App">
 			<div className="sideBar">
@@ -79,8 +89,15 @@ function App() {
 				</div>
 				<div className="chatFooter">
 					<div className="inp">
-						<input type="text" placeholder="Send a message" name="" id="" />
-						<button className="send">
+						<input
+							type="text"
+							placeholder="Send a message"
+							value={input}
+							onChange={(e) => {
+								setInput(e.target.value);
+							}}
+						/>
+						<button className="send" onClick={handleSend}>
 							<img src={sendBtn} alt="Send" />
 						</button>
 					</div>
