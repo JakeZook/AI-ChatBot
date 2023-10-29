@@ -9,8 +9,8 @@ html {
 }
 
 body {
-	background: rgb(3, 0, 31);
-	color: white;
+	background-color: rgb(3, 0, 31) !important;
+	color: white !important;
 }
 
 .App {
@@ -67,6 +67,10 @@ body {
 	border-radius: 0.5rem;
 }
 
+.midBtn:hover {
+	background: #2d1bf6;
+}
+
 .query {
 	display: flex;
 	align-items: center;
@@ -77,6 +81,10 @@ body {
 	margin: 1rem auto;
 	border-radius: 0.5rem;
 	border: 1px solid rgba(98, 98, 98, 1);
+}
+
+.query:hover {
+	background: #5a4bff;
 }
 
 .query > img {
@@ -101,12 +109,12 @@ body {
 	padding-right: 1rem;
 }
 
-.listItems:nth-child(1) > .listItemsImg {
+.github img {
 	margin-right: 0.5rem;
 }
 
-.listItems:nth-child(3) > .listItemsImg {
-	margin-right: 0.75rem;
+.email img {
+	margin-right: 0.7rem;
 }
 
 .main {
@@ -196,4 +204,9 @@ body {
 
 h3 {
 	margin-bottom: 1rem;
+}
+
+a {
+	list-style: none;
+	text-decoration: none;
 }
