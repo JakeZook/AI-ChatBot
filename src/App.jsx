@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import "./App.css";
 
@@ -14,11 +14,48 @@ import userIcon from "./assets/user-icon.png";
 import { sendMsgToTrundle } from "./openAi";
 
 function App() {
+	const msgEnd = useRef(null);
+
 	const [input, setInput] = useState("");
+	const [messages, setMessages] = useState([
+		{
+			text: "Hi, I am Trundle. Ask me anything!",
+			isBot: true,
+		},
+	]);
+
+	useEffect(() => {
+		msgEnd.current.scrollIntoView();
+	}, [messages]);
 
 	const handleSend = async () => {
-		const res = await sendMsgToTrundle(input);
-		console.log(res);
+		const text = input;
+		setInput("");
+
+		setMessages([...messages, { text, isBot: false }]);
+
+		const res = await sendMsgToTrundle(text);
+		setMessages([
+			...messages,
+			{ text, isBot: false },
+			{ text: res, isBot: true },
+		]);
+	};
+
+	const handleEnter = async (e) => {
+		if (e.key === "Enter") await handleSend();
+	};
+
+	const handleQuery = async (e) => {
+		const text = e.target.value;
+		setMessages([...messages, { text, isBot: false }]);
+
+		const res = await sendMsgToTrundle(text);
+		setMessages([
+			...messages,
+			{ text, isBot: false },
+			{ text: res, isBot: true },
+		]);
 	};
 
 	return (
@@ -29,18 +66,56 @@ function App() {
 						<img src={logo} alt="logo" className="logo" />
 						<span className="brand">TrundleGPT</span>
 					</div>
-					<button className="midBtn">
+					<button
+						className="midBtn"
+						onClick={() => {
+							window.location.reload();
+						}}
+					>
 						<img src={addBtn} alt="new chat" className="addBtn" />
 						New Chat
 					</button>
 					<div className="upperSideBottom">
-						<button className="query">
+						<h1 className="header">Try these prompts!</h1>
+						<button
+							className="query"
+							onClick={handleQuery}
+							value={"What is AI?"}
+						>
 							<img src={msgIcon} alt="Query" />
-							What is programming?
+							What is AI?
 						</button>
-						<button className="query">
+						<button
+							className="query"
+							onClick={handleQuery}
+							value={"How do you use an API?"}
+						>
 							<img src={msgIcon} alt="Query" />
-							How to use an API
+							How do you use an API?
+						</button>
+						<button
+							className="query"
+							onClick={handleQuery}
+							value={"Will AI take over the world?"}
+						>
+							<img src={msgIcon} alt="Query" />
+							Will AI take over the world?
+						</button>
+						<button
+							className="query"
+							onClick={handleQuery}
+							value={"What should I make for dinner?"}
+						>
+							<img src={msgIcon} alt="Query" />
+							What should I eat for dinner?
+						</button>
+						<button
+							className="query"
+							onClick={handleQuery}
+							value={"Tell me a joke."}
+						>
+							<img src={msgIcon} alt="Query" />
+							Tell me a joke.
 						</button>
 					</div>
 				</div>
@@ -61,38 +136,26 @@ function App() {
 			</div>
 			<div className="main">
 				<div className="chats">
-					<div className="chat">
-						<img className="chatImg" src={userIcon} alt="" />
-						<p className="txt">
-							Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-							minus quas explicabo possimus. Repellendus atque maiores
-							necessitatibus perferendis autem deserunt?
-						</p>
-					</div>
-					<div className="chat bot">
-						<img className="chatImg" src={logo} alt="" />
-						<p className="txt">
-							Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet
-							molestias, repellat maiores id minus nihil excepturi eaque
-							quisquam! Rerum, excepturi nisi? Est perferendis et maxime iure.
-							Minus, pariatur, voluptas quae animi quis iste vel iusto fugiat
-							eius dolores voluptatum sit? Laudantium amet ullam impedit tempora
-							odit fuga unde excepturi ad deserunt? Rem qui facere cumque
-							recusandae laudantium, necessitatibus sequi accusantium
-							exercitationem blanditiis tempora, quod quasi voluptatibus? Labore
-							iure vitae aspernatur nobis maxime optio minima soluta porro ipsa
-							architecto blanditiis eligendi a voluptatibus minus odio totam
-							nostrum saepe fugit, quo commodi. Perspiciatis fuga nisi assumenda
-							quae minus iusto doloribus omnis ea?
-						</p>
-					</div>
+					{messages.map((message, i) => (
+						<div key={i} className={message.isBot ? "chat bot" : "chat"}>
+							<img
+								className="chatImg"
+								src={message.isBot ? logo : userIcon}
+								alt=""
+							/>
+							<p className="txt">{message.text}</p>
+						</div>
+					))}
+					<div ref={msgEnd} />
 				</div>
 				<div className="chatFooter">
 					<div className="inp">
 						<input
 							type="text"
 							placeholder="Send a message"
+							onClick={handleQuery}
 							value={input}
+							onKeyDown={handleEnter}
 							onChange={(e) => {
 								setInput(e.target.value);
 							}}
